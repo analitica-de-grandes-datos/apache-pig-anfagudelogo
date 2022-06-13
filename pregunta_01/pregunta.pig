@@ -16,10 +16,9 @@ $ pig -x local -f pregunta.pig
 
 
 -- carga de datos desde la carpeta local
-data = LOAD 'data.tsv' USING PigStorage('\t') AS (letter:chararray, date:chararray, number:chararray);
+data = LOAD 'data.tsv' USING PigStorage('\t') AS (letter:chararray, fecha:chararray, number:chararray);
 
 data = FOREACH (GROUP data BY letter) GENERATE group,COUNT(data.letter);
 
--- escribe el archivo de salida en el sistema local
-STORE data INTO '/workspace/output/' USING PigStorage(',');
+STORE data INTO 'output' USING PigStorage(',');
 
