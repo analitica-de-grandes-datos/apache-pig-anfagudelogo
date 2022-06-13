@@ -47,19 +47,18 @@ data = LIMIT data 10;
 
 data = FOREACH data GENERATE driverId,truckId,eventTime;
 
-data = FOREACH data GENERATE driverId,truckId,REPLACE(eventTime, '\\D', '') as fecha;
+-- data = FOREACH data GENERATE driverId,truckId,REPLACE(eventTime, '\\D', '999') as fecha;
+
+data = FOREACH data GENERATE driverId,truckId,REPLACE(eventTime, ':', '8888') as fecha;
+
+data = FOREACH data GENERATE driverId,truckId,REPLACE(fecha, '\\.', '9999') as fecha;
+
 
 order_by_data = ORDER data BY  driverId ASC, fecha ASC;
 
-order_by_data = FOREACH order_by_data driverId,truckId, REPLACE(fecha, '([0-9][0-9])([0-9][0-9])([0-9])','\1:\2.\3')
 
-STORE data INTO 'output' USING PigStorage(',');
+order_by_data = FOREACH order_by_data GENERATE driverId,truckId, REPLACE(fecha, '8888','\\:') as fecha;
+order_by_data = FOREACH order_by_data GENERATE driverId,truckId, REPLACE(fecha, '9999','\\.') as fecha;
 
-/*
-order_by_data = ORDER data BY  number ASC;
+STORE order_by_data INTO 'output' USING PigStorage(',');
 
-limit_data = LIMIT order_by_data 10;
-
-STORE limit_data INTO 'output' USING PigStorage(',');
-
-*/
