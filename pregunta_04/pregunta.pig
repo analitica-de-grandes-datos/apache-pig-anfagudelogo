@@ -43,9 +43,12 @@ data = LOAD 'data.csv' USING PigStorage(',') AS
           routeName:charArray,
           eventDate:charArray);
 
-data = LIMIT data 10;
+data_3 = FOREACH data GENERATE driverId,truckId, eventTime; 
+limit_data = LIMIT data_3 10;
+order_by = ORDER limit_data BY driverId ASC, truckId ASC, eventTime ASC;
+STORE order_by INTO 'output' USING PigStorage(',');
 
-data = FOREACH data GENERATE driverId,truckId,eventTime;
+/*data = FOREACH data GENERATE driverId,truckId,eventTime;
 
 -- data = FOREACH data GENERATE driverId,truckId,REPLACE(eventTime, '\\D', '999') as fecha;
 
@@ -62,3 +65,4 @@ order_by_data = FOREACH order_by_data GENERATE driverId,truckId, REPLACE(fecha, 
 
 STORE order_by_data INTO 'output' USING PigStorage(',');
 
+*/
