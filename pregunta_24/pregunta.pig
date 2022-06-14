@@ -20,3 +20,16 @@ $ pig -x local -f pregunta.pig
 */
 
 
+data = LOAD 'data.csv' USING PigStorage(',') AS 
+        ( number:int,
+          nombre:charArray,
+          apellido:charArray,
+          fecha:charArray,
+          color:charArray,
+          end_number:int);
+
+
+data = FOREACH data GENERATE REGEX_EXTRACT(fecha, '-[0-9][0-9]-',0) as day;
+data = FOREACH data GENERATE REPLACE(day, '-','') as day_clean;       
+
+STORE data INTO 'output' USING PigStorage(',');
