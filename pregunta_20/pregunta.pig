@@ -34,4 +34,4 @@ data = LOAD 'data.csv' USING PigStorage(',') AS
 data = FOREACH data GENERATE nombre,color;
 data = FILTER data BY NOT (color matches '.*b.*');                    
 
-STORE data INTO 'output' USING PigStorage(' ');
+STORE data INTO 'output' USING PigStorage(',');
