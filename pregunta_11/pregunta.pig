@@ -33,3 +33,15 @@ $ pig -x local -f pregunta.pig
         >>> Escriba su respuesta a partir de este punto <<<
 */
 
+data = LOAD 'data.csv' USING PigStorage(',') AS 
+        ( number:int,
+          nombre:charArray,
+          apellido:charArray,
+          fecha:charArray,
+          color:charArray,
+          end_number:int);
+
+data = FOREACH data GENERATE apellido,UPPER(apellido), LOWER(apellido);
+data = ORDER data BY apellido asc;
+
+STORE data INTO 'output' USING PigStorage(',');
